@@ -23,7 +23,7 @@ df = pd.DataFrame(data)
 df['date_value'] = pd.to_datetime(df['date_value'], format='%Y%m')
 
 # Streamlit app
-st.title('Value Time Series Visualization')
+st.title('Novelty Detection')
 
 # Selectors for chronic_condition and value_type
 selected_chronic_condition = st.selectbox('Select Chronic Condition', df['chronic_condition'].unique())
