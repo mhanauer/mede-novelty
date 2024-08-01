@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
-import plotly.express as px
 
 # Sample DataFrame with chronic_condition and value_type
 data = {
@@ -36,8 +35,10 @@ filtered_df = df[(df['chronic_condition'] == selected_chronic_condition) & (df['
 # Determine value format
 if selected_value_type == 'Allowed Amount':
     filtered_df.loc[:, 'formatted_value'] = filtered_df['value'].apply(lambda x: f"${x:,.2f}")
+    yaxis_title = 'Allowed Amount'
 elif selected_value_type == 'Total Claims':
     filtered_df.loc[:, 'formatted_value'] = filtered_df['value'].apply(lambda x: f"{x:,}")
+    yaxis_title = 'Total Claims'
 
 # Plot the data with Plotly
 fig = go.Figure()
@@ -68,7 +69,7 @@ fig.add_trace(go.Scatter(
 fig.update_layout(
     title='Value Over Time',
     xaxis_title='Date',
-    yaxis_title='Value',
+    yaxis_title=yaxis_title,
     hovermode='x unified'
 )
 
