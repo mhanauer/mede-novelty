@@ -3,12 +3,20 @@ import pandas as pd
 import plotly.graph_objs as go
 import plotly.express as px
 
-# Sample DataFrame
+# Sample DataFrame with chronic_condition and value_type
 data = {
-    'date_value': ['202301', '202302', '202303', '202304', '202305'],
-    'value': [100, 150, 200, 250, 300],
-    'group_key': ['A_allowedamount', 'A_allowedamount', 'A_allowedamount', 'A_allowedamount', 'A_allowedamount'],
-    'novelty': [0, 0, 0, 0, 1]
+    'date_value': ['202301', '202302', '202303', '202304', '202305', '202306', '202307', '202308', '202309', '202310', 
+                   '202301', '202302', '202303', '202304', '202305', '202306', '202307', '202308', '202309', '202310'],
+    'value': [100, 150, 200, 250, 800, 300, 350, 400, 450, 1200, 200, 250, 300, 350, 900, 250, 300, 350, 400, 1000],
+    'chronic_condition': ['Diabetes', 'Diabetes', 'Diabetes', 'Diabetes', 'Diabetes',
+                          'Diabetes', 'Diabetes', 'Diabetes', 'Diabetes', 'Diabetes',
+                          'Hypertension', 'Hypertension', 'Hypertension', 'Hypertension', 'Hypertension',
+                          'Hypertension', 'Hypertension', 'Hypertension', 'Hypertension', 'Hypertension'],
+    'value_type': ['Allowed Amount', 'Allowed Amount', 'Allowed Amount', 'Allowed Amount', 'Allowed Amount',
+                   'Total Claims', 'Total Claims', 'Total Claims', 'Total Claims', 'Total Claims',
+                   'Allowed Amount', 'Allowed Amount', 'Allowed Amount', 'Allowed Amount', 'Allowed Amount',
+                   'Total Claims', 'Total Claims', 'Total Claims', 'Total Claims', 'Total Claims'],
+    'novelty': [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
 }
 df = pd.DataFrame(data)
 
@@ -18,16 +26,17 @@ df['date_value'] = pd.to_datetime(df['date_value'], format='%Y%m')
 # Streamlit app
 st.title('Value Time Series Visualization')
 
-# Selector for group_key
-selected_group_key = st.selectbox('Select Group Key', df['group_key'].unique())
+# Selectors for chronic_condition and value_type
+selected_chronic_condition = st.selectbox('Select Chronic Condition', df['chronic_condition'].unique())
+selected_value_type = st.selectbox('Select Value Type', df['value_type'].unique())
 
-# Filter DataFrame based on selection
-filtered_df = df[df['group_key'] == selected_group_key]
+# Filter DataFrame based on selections
+filtered_df = df[(df['chronic_condition'] == selected_chronic_condition) & (df['value_type'] == selected_value_type)]
 
 # Determine value format
-if '_allowedamount' in selected_group_key:
+if selected_value_type == 'Allowed Amount':
     filtered_df.loc[:, 'formatted_value'] = filtered_df['value'].apply(lambda x: f"${x:,.2f}")
-elif '_totalclaims' in selected_group_key:
+elif selected_value_type == 'Total Claims':
     filtered_df.loc[:, 'formatted_value'] = filtered_df['value'].apply(lambda x: f"{x:,}")
 
 # Plot the data with Plotly
