@@ -23,7 +23,11 @@ df = pd.DataFrame(data)
 df['date_value'] = pd.to_datetime(df['date_value'], format='%Y%m')
 
 # Streamlit app
-st.title('Novelty Detection')
+st.title('Chronic Condition Allowed PMPM Novelty Detection')
+
+st.markdown("""
+Below is our chronic condition allowed PMPM (Per Member Per Month) novelty detection. It identifies whether the data for the last month is an outlier compared to previous months for allowed PMPM by chronic condition.
+""")
 
 # Selectors for chronic_condition and value_type
 selected_chronic_condition = st.selectbox('Select Chronic Condition', df['chronic_condition'].unique())
